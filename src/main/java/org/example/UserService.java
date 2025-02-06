@@ -10,7 +10,7 @@ public class UserService {
                 .filter(
                         (user) -> user.getUserUsings()
                                 .stream()
-                                .noneMatch((x) -> x > maxUsingValue)
+                                .allMatch((x) -> x < maxUsingValue)
                 )
                 .collect(Collectors.toList());
     }
