@@ -1,5 +1,11 @@
 package org.example;
 
+import org.example.filter.UserService;
+import org.example.reader.CSVUserReader;
+import org.example.reader.UserReader;
+import org.example.writer.CSVUserWriter;
+import org.example.writer.UserWriter;
+
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.List;
@@ -15,11 +21,14 @@ public class Task {
         String inputFilePath = getFileNameFromArgs(args);
         double maxUsingValue = getMaxUsingValueFromArgs(args);
 
-        List<User> users = UsersTable.getUsersFromFile(inputFilePath);
-        List<User> filteredUsers = UserService.filterUsers(users, maxUsingValue);
+        UserReader reader = new CSVUserReader();
+        List<User> users = reader.getUsersFromFile(inputFilePath);
+
+        List<User> filteredUsers = new UserService().filterUsers(users, maxUsingValue);
 
         String outputFilePath = createOutputFilePath(inputFilePath);
-        UsersTable.printUsersToFile(filteredUsers, outputFilePath);
+        UserWriter writer = new CSVUserWriter();
+        writer.printUsersToFile(filteredUsers, outputFilePath);
     }
 
     public static String getFileNameFromArgs(String[] args) {

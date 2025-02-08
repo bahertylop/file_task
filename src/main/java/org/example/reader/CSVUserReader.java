@@ -1,6 +1,8 @@
-package org.example;
+package org.example.reader;
 
-import java.io.*;
+import org.example.User;
+
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -8,11 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class UsersTable {
+public class CSVUserReader implements UserReader {
 
-    private static final String COLUMN_NAMES = "id|name|waterCountDay|waterCountNight|gasCount|electroCountDay|electroCountNight\n";
-
-    public static List<User> getUsersFromFile(String fileName) {
+    @Override
+    public List<User> getUsersFromFile(String fileName) {
         List<User> users = new ArrayList<>();
         Path inputFilePath = Paths.get(fileName);
         try (
@@ -31,7 +32,7 @@ public class UsersTable {
         return users;
     }
 
-    private static User parseUserFromLine(String line) throws IOException {
+    private User parseUserFromLine(String line) throws IOException {
         String[] params = line.split("\\|");
         if (params.length != 7) {
             throw new IOException("Некорректная строка в файле");
@@ -46,20 +47,5 @@ public class UsersTable {
                 Integer.parseInt(params[5]),
                 Integer.parseInt(params[6])
         );
-    }
-
-    public static void printUsersToFile(List<User> users, String newFileName) {
-        try (
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(newFileName))
-        ) {
-            bufferedWriter.write(COLUMN_NAMES);
-
-            for (User user : users) {
-                bufferedWriter.write(user.toLine());
-                bufferedWriter.newLine();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
