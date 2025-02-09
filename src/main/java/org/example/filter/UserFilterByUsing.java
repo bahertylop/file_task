@@ -5,9 +5,16 @@ import org.example.User;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UserService {
+public class UserFilterByUsing implements Filter {
 
-    public List<User> filterUsers(List<User> users, double maxUsingValue) {
+    private final double maxUsingValue;
+
+    public UserFilterByUsing(double maxUsingValue) {
+        this.maxUsingValue = maxUsingValue;
+    }
+
+    @Override
+    public List<User> filterUsers(List<User> users) {
         return users.stream()
                 .filter(
                         (user) -> user.getUserUsings()

@@ -1,6 +1,7 @@
 package org.example;
 
-import org.example.filter.UserService;
+import org.example.filter.Filter;
+import org.example.filter.UserFilterByUsing;
 import org.example.reader.CSVUserReader;
 import org.example.reader.UserReader;
 import org.example.writer.CSVUserWriter;
@@ -24,7 +25,8 @@ public class Task {
         UserReader reader = new CSVUserReader();
         List<User> users = reader.getUsersFromFile(inputFilePath);
 
-        List<User> filteredUsers = new UserService().filterUsers(users, maxUsingValue);
+        Filter filter = new UserFilterByUsing(maxUsingValue);
+        List<User> filteredUsers = filter.filterUsers(users);
 
         String outputFilePath = createOutputFilePath(inputFilePath);
         UserWriter writer = new CSVUserWriter();
